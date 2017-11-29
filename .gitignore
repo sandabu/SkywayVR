@@ -6,5 +6,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# for JetBrains editor
+.idea/
+
 # because macOS is macOS.
 .DS_Store
