@@ -17,6 +17,7 @@
     "react-native": "~0.48.0",
     "react-vr": "~2.0.0",
     "react-vr-web": "~2.0.0",
+    "skyway-js": "^1.1.1",
     "three": "^0.87.0",
     "webvr-polyfill": "^0.9.40"
   },
