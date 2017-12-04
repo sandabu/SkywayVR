@@ -50,7 +50,6 @@ export default class SkywayVR extends React.Component {
       if(msg.from === 'skyway') {
         switch(msg.action) {
           case 'OPEN':
-            console.log('from react. id is ' + msg.id);
             this.setState({
               id: msg.id
             });
@@ -125,9 +124,7 @@ export default class SkywayVR extends React.Component {
             backgroundColor: 'blue',
             margin: 0.1,
             flex: 0.3
-          }} onEnter={
-            () => { console.log(window.navigator); }
-          } />
+          }} />
           <View style={{
             backgroundColor: 'red',
             margin: 0.1,

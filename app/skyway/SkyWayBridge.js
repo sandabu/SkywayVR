@@ -1,3 +1,5 @@
+import Peer from 'skyway-js';
+
 export default class SkyWayBridge {
   constructor(worker) {
     this._worker = worker;
@@ -9,6 +11,9 @@ export default class SkyWayBridge {
       key: "03f94c1b-f2d1-4c72-b6aa-c933aa4467ae",
       debug: 3
     });
+
+    const search = location.search.match(/rid=(.*?)(&|$)/);
+    this._rid = search ? search[1] : '';
 
     this._connectedPeers = {};
 
@@ -59,15 +64,46 @@ export default class SkyWayBridge {
     navigator.mediaDevices.getUserMedia({audio: true})
       .then( (stream) => {
         // Success
-        // $('#my-video').get(0).srcObject = stream;
         this._localStream = stream;
         const msg = {
           'info': 'succeeded getting mediaDevice',
-        }
+        };
         this.postMessage(msg);
+
+        //Connect the peer if rid exists.
+        if(this._rid){
+          const call = this._peer.call(this._rid, stream);
+          this.setupCallEventHandlers(call);
+        }
+
       }).catch(function (error) {
       // Error
       console.error('mediaDevice.getUserMedia() error:', error);
+    });
+  }
+
+  setupCallEventHandlers(call) {
+    if(this._existingCall) {
+      this._existingCall.close();
+    }
+
+    this._existingCall = call;
+
+    console.log('request call');
+    //When you get friend's stream
+    call.on('stream', (stream) => {
+      //ReactVRのSoundComponentを使うためには，WorkerにJSON化してstreamを送らないといけないので
+      //今回はメインスレッドにて実DOMでAudioタグを作成
+      const body = document.getElementsByTagName("body").item(0);
+      const audioEl = document.createElement('audio');
+      audioEl.srcObject = stream;
+      audioEl.play();
+      body.appendChild(audioEl);
+    });
+
+    call.on('close', () => {
+      console.log('disconnected!');
+      //When friend or you closed stream
     });
   }
 
@@ -87,11 +123,14 @@ export default class SkyWayBridge {
     });
 
     // Await connections from others
-    this._peer.on('connection', c => {
+    this._peer.on('call', (c) => {
       // Show connection when it is completely ready
-      c.on('open', () => connect(c));
+      //応答
+      c.answer(this._localStream);
+      //Audio作成
+      this.setupCallEventHandlers(c);
     });
-    this._peer.on('error', err => console.log(err));
+    this._peer.on('error', (err) => console.log(err));
   }
 
 }
