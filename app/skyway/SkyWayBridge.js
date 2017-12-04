@@ -9,7 +9,7 @@ export default class SkyWayBridge {
 
     this._peer = new Peer({
       key: "03f94c1b-f2d1-4c72-b6aa-c933aa4467ae",
-      debug: 3
+      debug: 1
     });
 
     const search = location.search.match(/rid=(.*?)(&|$)/);
@@ -89,7 +89,6 @@ export default class SkyWayBridge {
 
     this._existingCall = call;
 
-    console.log('request call');
     //When you get friend's stream
     call.on('stream', (stream) => {
       //ReactVRのSoundComponentを使うためには，WorkerにJSON化してstreamを送らないといけないので
@@ -99,6 +98,11 @@ export default class SkyWayBridge {
       audioEl.srcObject = stream;
       audioEl.play();
       body.appendChild(audioEl);
+
+      this.postMessage({
+        action: 'CONNECTED'
+      });
+
     });
 
     call.on('close', () => {

@@ -14,7 +14,6 @@ import {
 
 export default class SkywayVR extends React.Component {
 
-
   constructor(props) {
     super(props);
 
@@ -35,6 +34,7 @@ export default class SkywayVR extends React.Component {
     msg.from = 'react-vr';
     window.postMessage(JSON.stringify(msg));
   }
+
   _onStartClicked(e) {
     let msg = {
       'action': 'COPY_ID'
@@ -42,8 +42,7 @@ export default class SkywayVR extends React.Component {
     this._postMessage(msg);
   }
 
-
-  componentWillMount() {
+  _messageListener() {
     //Skyway(メインスレッド)からのメッセージ取得
     window.addEventListener('message', (e) => {
       let msg = JSON.parse(e.data);
@@ -54,12 +53,22 @@ export default class SkywayVR extends React.Component {
               id: msg.id
             });
             break;
+          case 'CONNECTED':
+            this.setState({
+              status: this.Status.CONNECTED,
+            });
+            break;
           default:
             break;
         }
       }
     });
   }
+
+  componentWillMount() {
+    this._messageListener();
+  }
+
   componentDidMount() {
     let msg = {
       'action': 'GET_USER_MEDIA',
@@ -67,24 +76,11 @@ export default class SkywayVR extends React.Component {
     this._postMessage(msg);
   }
 
-
   render() {
     return (
       <View>
-        <Pano source={ asset('lake.jpg') }
-        style={{
-          transform: [
-            { rotateY: -90 }
-          ]
-        }}/>
+        <Pano source={ asset('town.jpg') } />
         <Scene style={{ transform: [{ translate: [0, 1.5, 0] }] }} />
-        {/*<Plane style={{*/}
-          {/*transform: [*/}
-            {/*{ rotateX: -90 },*/}
-            {/*{ scale: 100},*/}
-          {/*],*/}
-          {/*color: '#666' }} />*/}
-
 
         {/*スタートボタン*/}
         <VrButton style={{
@@ -94,7 +90,8 @@ export default class SkywayVR extends React.Component {
           transform: [
             { translate: [-1, 2, -2] }
           ],
-          backgroundColor: '#666'
+          backgroundColor: '#666',
+          display: this.state.status === this.Status.CONNECTED ? 'none' : 'flex',
         }} onClick={this._onStartClicked.bind(this)}>
           <Text style={{
             textAlign: 'center',
@@ -141,7 +138,7 @@ export default class SkywayVR extends React.Component {
             { translate: [0, 13, -9] },
             { rotateY: -85 },
           ],
-          display: 'none',
+          display: this.state.status === this.Status.CONNECTED ? 'flex' : 'none',
         }} lit={true} />
 
         <PointLight intensity={1.0} style={{ transform: [{ translate: [0, 2, 0] }, {rotateX: -90}] }} />
