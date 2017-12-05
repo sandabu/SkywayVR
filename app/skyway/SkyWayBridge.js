@@ -107,10 +107,13 @@ export default class SkyWayBridge {
       //ReactVRのSoundComponentを使うためには，WorkerにJSON化してstreamを送らないといけないので
       //今回はメインスレッドにて実DOMでAudioタグを作成
       const body = document.getElementsByTagName("body").item(0);
-      const audioEl = document.createElement('audio');
-      audioEl.srcObject = stream;
-      audioEl.play();
-      body.appendChild(audioEl);
+      const videoEl = document.createElement('video');
+      videoEl.srcObject = stream;
+      videoEl.setAttribute('webkit-playsinline', true);
+      videoEl.setAttribute('playsinline', true);
+      videoEl.setAttribute('autoplay', true);
+      body.appendChild(videoEl);
+      videoEl.play();
 
       this.postMessage({
         action: 'CONNECTED'
