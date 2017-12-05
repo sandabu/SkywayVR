@@ -12,11 +12,6 @@ export default class SkyWayBridge {
       debug: 1
     });
 
-    const search = location.search.match(/rid=(.*?)(&|$)/);
-    this._rid = search ? search[1] : '';
-
-    this._connectedPeers = {};
-
     //Message Listener from worker
     this._worker.addEventListener('message', (e) => {
       try {
@@ -28,6 +23,9 @@ export default class SkyWayBridge {
               break;
             case 'COPY_ID':
               this.copyId();
+              break;
+            case 'SEND_HEAD_ROT':
+              this.sendHeadRot(msg.rot);
               break;
             default:
               break;
@@ -60,6 +58,15 @@ export default class SkyWayBridge {
     // tmpEl.parentNode.removeChild(tmpEl);
   }
 
+  sendHeadRot(rot) {
+    if(this._dataConn && rot) {
+      this._dataConn.send({
+        type: 'rot',
+        rot: rot
+      });
+    }
+  }
+
   getUserMedia() {
     navigator.mediaDevices.getUserMedia({audio: true})
       .then( (stream) => {
@@ -71,9 +78,14 @@ export default class SkyWayBridge {
         this.postMessage(msg);
 
         //Connect the peer if rid exists.
-        if(this._rid){
-          const call = this._peer.call(this._rid, stream);
+        const search = location.search.match(/rid=(.*?)(&|$)/);
+        const rid = search ? search[1] : '';
+        if(rid){
+          const call = this._peer.call(rid, stream);
           this.setupCallEventHandlers(call);
+
+          const dataConn = this._peer.connect(call.peer);
+          this.setupSendDataEventHandler(dataConn);
         }
 
       }).catch(function (error) {
@@ -83,11 +95,12 @@ export default class SkyWayBridge {
   }
 
   setupCallEventHandlers(call) {
-    if(this._existingCall) {
-      this._existingCall.close();
+    if(this._mediaConn) {
+      this._mediaConn.close();
     }
 
-    this._existingCall = call;
+    this._mediaConn = call;
+
 
     //When you get friend's stream
     call.on('stream', (stream) => {
@@ -103,6 +116,7 @@ export default class SkyWayBridge {
         action: 'CONNECTED'
       });
 
+
     });
 
     call.on('close', () => {
@@ -111,8 +125,31 @@ export default class SkyWayBridge {
     });
   }
 
+  setupSendDataEventHandler(dataConn) {
+    if(this._dataConn) {
+      this._dataConn.close();
+    }
+
+    this._dataConn = dataConn;
+
+    dataConn.on('data', (data) => {
+      console.log(data);
+      if(data.type === 'rot'){
+        const rot = data.rot;
+        this.postMessage({
+          action: 'RETURN_FRIENDS_HEAD_ROT',
+          rot: {
+            x: rot[0],
+            y: rot[1],
+            z: rot[2],
+          }
+        });
+      }
+    });
+  }
+
   postMessage(msg) {
-    msg.from = "skyway";
+    msg.from = 'skyway';
     this._worker.postMessage(JSON.stringify(msg));
   }
 
@@ -124,6 +161,7 @@ export default class SkyWayBridge {
         'action': 'OPEN'
       }
       this.postMessage(msg);
+
     });
 
     // Await connections from others
@@ -134,6 +172,12 @@ export default class SkyWayBridge {
       //Audio作成
       this.setupCallEventHandlers(c);
     });
+
+    this._peer.on('connection', (c) => {
+      console.log('get some data...');
+      this.setupSendDataEventHandler(c);
+    });
+
     this._peer.on('error', (err) => console.log(err));
   }
 

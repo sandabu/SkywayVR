@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactMixin from 'react-mixin';
+import ReactTimerMixin from 'react-timer-mixin';
 import {
   AppRegistry,
   asset,
@@ -10,6 +12,8 @@ import {
   PointLight,
   AmbientLight,
   VrButton,
+  VrHeadModel,
+
 } from 'react-vr';
 
 export default class SkywayVR extends React.Component {
@@ -24,8 +28,15 @@ export default class SkywayVR extends React.Component {
 
     this.state = {
       status: this.Status.INIT,
+      avatar_rot: {
+        x: 0,
+        y: -85,
+        z: 0,
+      },
       my_id: null,
     };
+    //
+    this._avatarReflesh = 100;
 
   }
 
@@ -35,7 +46,7 @@ export default class SkywayVR extends React.Component {
     window.postMessage(JSON.stringify(msg));
   }
 
-  _onStartClicked(e) {
+  _onStartClicked() {
     let msg = {
       'action': 'COPY_ID'
     }
@@ -58,6 +69,15 @@ export default class SkywayVR extends React.Component {
               status: this.Status.CONNECTED,
             });
             break;
+          case 'RETURN_FRIENDS_HEAD_ROT':
+            this.setState({
+              avatar_rot: {
+                x: -msg.rot.x,
+                y: -msg.rot.y - 85,
+                z: -msg.rot.z,
+              },
+            });
+            break;
           default:
             break;
         }
@@ -65,15 +85,27 @@ export default class SkywayVR extends React.Component {
     });
   }
 
+  _watchHeadRotation() {
+    this.setInterval(() => {
+      const rot = VrHeadModel.rotation();
+      this._postMessage({
+        action: 'SEND_HEAD_ROT',
+        rot: rot,
+      });
+    }, this._avatarReflesh);
+  }
+
   componentWillMount() {
     this._messageListener();
   }
 
   componentDidMount() {
+    //マウント後にUserMediaを取得しないと，window.SkyWayBridgeが存在しない
     let msg = {
       'action': 'GET_USER_MEDIA',
     };
     this._postMessage(msg);
+    this._watchHeadRotation();
   }
 
   render() {
@@ -88,7 +120,7 @@ export default class SkywayVR extends React.Component {
           height: 1,
           width: 2,
           transform: [
-            { translate: [-1, 2, -2] }
+            { translate: [-1, 2, -1] }
           ],
           backgroundColor: '#666',
           display: this.state.status === this.Status.CONNECTED ? 'none' : 'flex',
@@ -136,7 +168,9 @@ export default class SkywayVR extends React.Component {
           transform: [
             { scale: 0.1 },
             { translate: [0, 13, -9] },
-            { rotateY: -85 },
+            { rotateX : this.state.avatar_rot.x },
+            { rotateY : this.state.avatar_rot.y },
+            { rotateZ : this.state.avatar_rot.z },
           ],
           display: this.state.status === this.Status.CONNECTED ? 'flex' : 'none',
         }} lit={true} />
@@ -156,5 +190,8 @@ export default class SkywayVR extends React.Component {
     );
   }
 };
+
+//ES6でのTimerMixin
+ReactMixin.onClass(SkywayVR, ReactTimerMixin);
 
 AppRegistry.registerComponent('SkywayVR', () => SkywayVR);

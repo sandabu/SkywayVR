@@ -26,6 +26,7 @@ function init(bundle, parent, options, fonts) {
     // Begin the animation loop
     vr.start();
 
+    //Workerの取得とBridgeの作成
     const VRWorker = vr.rootView.context.bridge.getWorker();
     window.SkyWayBridge = new SkyWayBridge(VRWorker);
 
