@@ -105,10 +105,12 @@ export default class SkyWayBridge {
     //When you get friend's stream
     call.on('stream', (stream) => {
       //ReactVRのSoundComponentを使うためには，WorkerにJSON化してstreamを送らないといけないので
-      //今回はメインスレッドにて実DOMでAudioタグを作成
+      //今回はメインスレッドにて実DOMでVideoタグを作成
       const body = document.getElementsByTagName("body").item(0);
       const videoEl = document.createElement('video');
       videoEl.srcObject = stream;
+      //Safari 11だとautoplayに対応していない．playsinline系が必須．
+      //https://gist.github.com/voluntas/af937c1fd353e6f677e155b53d661807
       videoEl.setAttribute('webkit-playsinline', true);
       videoEl.setAttribute('playsinline', true);
       videoEl.setAttribute('autoplay', true);
