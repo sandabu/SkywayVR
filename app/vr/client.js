@@ -4,7 +4,6 @@
 
 // Auto-generated content.
 import {VRInstance} from 'react-vr-web';
-import * as OVRUI from 'ovrui';
 import 'webvr-polyfill';
 import SkyWayBridge from '../skyway/SkyWayBridge.js';
 

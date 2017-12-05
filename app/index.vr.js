@@ -30,8 +30,8 @@ export default class SkywayVR extends React.Component {
       status: this.Status.INIT,
       avatar_rot: {
         x: 0,
-        y: -85,
-        z: 0,
+        y: 180,
+        z: 180,
       },
       my_id: null,
     };
@@ -73,8 +73,8 @@ export default class SkywayVR extends React.Component {
             this.setState({
               avatar_rot: {
                 x: -msg.rot.x,
-                y: -msg.rot.y - 85,
-                z: -msg.rot.z,
+                y: msg.rot.y + 180,
+                z: msg.rot.z + 180,
               },
             });
             break;
@@ -162,12 +162,11 @@ export default class SkywayVR extends React.Component {
         </View>
 
         <Model source={{
-          obj: asset('models/pjanic.obj'),
-          mtl: asset('models/pjanic.mtl'),
+          obj: asset('models/RikuFace/mesh.obj'),
+          mtl: asset('models/RikuFace/mesh.mtl'),
         }} style={{
           transform: [
-            { scale: 0.1 },
-            { translate: [0, 13, -9] },
+            { translate: [0, 1.5, -0.65] },
             { rotateX : this.state.avatar_rot.x },
             { rotateY : this.state.avatar_rot.y },
             { rotateZ : this.state.avatar_rot.z },
