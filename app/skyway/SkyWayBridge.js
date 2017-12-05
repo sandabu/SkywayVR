@@ -133,7 +133,6 @@ export default class SkyWayBridge {
     this._dataConn = dataConn;
 
     dataConn.on('data', (data) => {
-      console.log(data);
       if(data.type === 'rot'){
         const rot = data.rot;
         this.postMessage({
