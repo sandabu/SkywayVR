@@ -13,7 +13,8 @@ import {
   AmbientLight,
   VrButton,
   VrHeadModel,
-
+  Animated,
+  Image,
 } from 'react-vr';
 
 export default class SkywayVR extends React.Component {
@@ -24,6 +25,7 @@ export default class SkywayVR extends React.Component {
     this.Status = {
       INIT: 'INIT',
       CONNECTED: 'CONNECTED',
+      GET_LIKE: 'GET_LIKE',
     };
 
     this.state = {
@@ -34,10 +36,12 @@ export default class SkywayVR extends React.Component {
         z: 180,
       },
       my_id: null,
+      friend_id: null,
+      likeBounceValue: new Animated.Value(0.1),
     };
     //
     this._avatarReflesh = 100;
-
+    this._likeIntervalTime = 2000;
   }
 
   _postMessage(msg) {
@@ -67,16 +71,22 @@ export default class SkywayVR extends React.Component {
           case 'CONNECTED':
             this.setState({
               status: this.Status.CONNECTED,
+              friend_id: msg.friend_id,
             });
             break;
           case 'RETURN_FRIENDS_HEAD_ROT':
-            this.setState({
-              avatar_rot: {
-                x: -msg.rot.x,
-                y: msg.rot.y + 180,
-                z: msg.rot.z + 180,
-              },
-            });
+            if(this.state.status === this.Status.CONNECTED) {
+              this.setState({
+                avatar_rot: {
+                  x: -msg.rot.x,
+                  y: msg.rot.y + 180,
+                  z: msg.rot.z + 180,
+                },
+              });
+            }
+            break;
+          case 'RETURN_FRIENDS_LIKE':
+            this._getLike();
             break;
           default:
             break;
@@ -95,6 +105,45 @@ export default class SkywayVR extends React.Component {
     }, this._avatarReflesh);
   }
 
+  _getLike() {
+    console.log('いいね！されました');
+
+    this.setState({
+      status: this.Status.GET_LIKE,
+      avatar_rot: {
+        x: -14.67994310099575,
+        y: 218.1507823613087,
+        z: 180
+      }
+    });
+
+    Animated.spring(this.state.likeBounceValue, {
+      toValue: 1.5,
+      friction: 4,
+    }).start();
+
+    //いいね解除
+    this.setTimeout(() => {
+      this.setState({
+        status: this.Status.CONNECTED,
+      });
+
+      Animated.spring(this.state.likeBounceValue, {
+        toValue: 0.1,
+        friction: 4,
+      }).start();
+
+    }, this._likeIntervalTime);
+
+  }
+
+  _gazeLike() {
+    console.log('いいね！しました');
+    this._postMessage({
+      'action': 'LIKE'
+    });
+  }
+
   componentWillMount() {
     this._messageListener();
   }
@@ -106,12 +155,13 @@ export default class SkywayVR extends React.Component {
     };
     this._postMessage(msg);
     this._watchHeadRotation();
+
   }
 
   render() {
     return (
       <View>
-        <Pano source={ asset('Golden_Louvre.jpg') } />
+        <Pano source={ asset('lake.jpg') } />
         <Scene style={{ transform: [{ translate: [0, 1.5, 0] }] }} />
 
         {/*スタートボタン*/}
@@ -120,10 +170,10 @@ export default class SkywayVR extends React.Component {
           height: 1,
           width: 2,
           transform: [
-            { translate: [-1, 2, -1] }
+            { translate: [-1, 2, -1.3] }
           ],
           backgroundColor: '#666',
-          display: this.state.status === this.Status.CONNECTED ? 'none' : 'flex',
+          display: this.state.friend_id ? 'none' : 'flex',
         }} onClick={this._onStartClicked.bind(this)}>
           <Text style={{
             textAlign: 'center',
@@ -138,28 +188,31 @@ export default class SkywayVR extends React.Component {
         </VrButton>
         {/*スタートボタン*/}
 
-
-        <View style={{
-          flex: 1,
-          flexDirection: 'column',
-          padding: 0.2,
-          height: 2, width: 2,
+        {/*いいねボタン*/}
+        <Image source={ asset('like_button.jpg') } style={{
+          height: 0.6, width: 2,
+          backgroundColor: '#ffffff66',
           transform: [
-            { translate: [1, 2.5, -1.5] },
+            { translate: [1.5, 2.5, -1.5] },
             { rotateY: -25 }
           ],
-        }}>
-          <View style={{
-            backgroundColor: 'blue',
-            margin: 0.1,
-            flex: 0.3
-          }} />
-          <View style={{
-            backgroundColor: 'red',
-            margin: 0.1,
-            flex: 0.3
-          }}/>
-        </View>
+        }} onEnter={ this._gazeLike.bind(this)} >
+        </Image>
+        {/*いいねボタン*/}
+
+        {/*サムアップ*/}
+        <Animated.Image source={ asset('like.svg') } style={{
+          height: 1.2,
+          width: 1.2,
+          transform: [
+            { scale: this.state.likeBounceValue },
+            { translate: [1.6, 1.5, -1.4] },
+            { rotateY: -80 }
+          ],
+        }}/>
+
+        {/*サムアップ*/}
+
 
         <Model source={{
           obj: asset('models/RikuFace/mesh.obj'),
@@ -171,7 +224,7 @@ export default class SkywayVR extends React.Component {
             { rotateY : this.state.avatar_rot.y },
             { rotateZ : this.state.avatar_rot.z },
           ],
-          display: this.state.status === this.Status.CONNECTED ? 'flex' : 'none',
+          display: this.state.friend_id ? 'flex' : 'none',
         }} lit={true} />
 
         <PointLight intensity={1.0} style={{ transform: [{ translate: [0, 2, 0] }, {rotateX: -90}] }} />

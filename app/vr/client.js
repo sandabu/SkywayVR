@@ -11,6 +11,15 @@ function init(bundle, parent, options) {
   WebVRPolyfill.InstallWebVRSpecShim();
   const vr = new VRInstance(bundle, 'SkywayVR', parent, {
     // Add custom options here
+    raycasters: [
+      {
+        getType: () => "mycursor",
+        getRayOrigin: () => [0, 0, 0],
+        getRayDirection: () => [0, 0, -1],
+        drawsCursor: () => true
+      }
+    ],
+    cursorVisibility: 'visible',
     ...options,
   });
   vr.render = function() {

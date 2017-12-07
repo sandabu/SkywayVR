@@ -27,6 +27,9 @@ export default class SkyWayBridge {
             case 'SEND_HEAD_ROT':
               this.sendHeadRot(msg.rot);
               break;
+            case 'LIKE':
+              this.sendLike();
+              break;
             default:
               break;
           }
@@ -63,6 +66,14 @@ export default class SkyWayBridge {
       this._dataConn.send({
         type: 'rot',
         rot: rot
+      });
+    }
+  }
+
+  sendLike() {
+    if(this._dataConn) {
+      this._dataConn.send({
+        type: 'like'
       });
     }
   }
@@ -118,7 +129,8 @@ export default class SkyWayBridge {
       videoEl.play();
 
       this.postMessage({
-        action: 'CONNECTED'
+        action: 'CONNECTED',
+        friend_id: this._id,
       });
 
 
@@ -138,16 +150,25 @@ export default class SkyWayBridge {
     this._dataConn = dataConn;
 
     dataConn.on('data', (data) => {
-      if(data.type === 'rot'){
-        const rot = data.rot;
-        this.postMessage({
-          action: 'RETURN_FRIENDS_HEAD_ROT',
-          rot: {
-            x: rot[0],
-            y: rot[1],
-            z: rot[2],
-          }
-        });
+      switch(data.type) {
+        case 'rot':
+          const rot = data.rot;
+          this.postMessage({
+            action: 'RETURN_FRIENDS_HEAD_ROT',
+            rot: {
+              x: rot[0],
+              y: rot[1],
+              z: rot[2],
+            }
+          });
+          break;
+        case 'like':
+          this.postMessage({
+            action: 'RETURN_FRIENDS_LIKE'
+          });
+          break;
+        default:
+          break;
       }
     });
   }
