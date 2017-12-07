@@ -111,7 +111,7 @@ export default class SkywayVR extends React.Component {
   render() {
     return (
       <View>
-        <Pano source={ asset('town.jpg') } />
+        <Pano source={ asset('Golden_Louvre.jpg') } />
         <Scene style={{ transform: [{ translate: [0, 1.5, 0] }] }} />
 
         {/*スタートボタン*/}

@@ -1,22 +1,221 @@
-<html>
-  <head>
+<!DOCTYPE HTML>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>SkywayVR</title>
-    <style>body { margin: 0; }</style>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  </head>
-  <body>
-    <script src="./client.bundle?platform=vr"></script>
-    <script>
-      // Initialize the React VR application
-      const vr = ReactVR.init(
-        '../index.vr.bundle?platform=vr&dev=true',
-        // Attach it to the body tag
-        document.body,
-        {
-          cursorVisibility: 'visible',
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.js"></script>
+    <style type="text/css">
+        h1, h2, h3, p {
+            font-family: "Hiragino Sans", "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", 游ゴシック, YuGothic, メイリオ, Meiryo, sans-serif !important;
+            font-weight: 200 !important;
         }
-      );
-    </script>
-  </body>
-</html>
+        html, body { height:100% }
+        h1 {
+            font-size: 3em;
+        }
 
+        #pc{
+            height: 100%;
+            display: block;
+        }
+
+        #sp {
+            display: none;
+        }
+
+        .ui.grid{
+            height: 100%;
+            margin-top: 0;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        #main {
+            height:100%;
+        }
+
+        .key.visual{
+            background: url("./img/kv.png") no-repeat;
+            -webkit-background-size: cover;
+            background-size: cover;
+            height: 100%;
+        }
+
+        #pc .left.column{
+            height: 100%;
+            background-color: #fffffff2;
+        }
+
+        .detail{
+            margin: 30px 0;
+        }
+
+        .left.content{
+            margin-left: 12px;
+        }
+        .components {
+            margin: 14px 0;
+        }
+        .powered{
+            margin: 20px 0 0;
+        }
+        .skyway{
+            margin: -12px 0;
+        }
+
+
+        @media screen and (min-width: 0px) and (max-device-width: 670px) {
+            h1, h2, h3, p {
+                font-weight: 100 !important;
+            }
+
+            #pc{
+                display: none;
+            }
+
+            #sp {
+                display: block;
+            }
+            .header {
+                margin: 23px 0;
+            }
+
+            .kv{
+                width: 100%;
+                margin: 0.8em 0;
+            }
+            .subtitle{
+                margin: 0.2em 0;
+            }
+            .title {
+                margin: 0;
+            }
+            .powered{
+                margin: 20px 0 80px;
+            }
+
+
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div id="pc">
+            <div class="key visual">
+                <div class="ui grid">
+                    <div class="left seven wide column">
+                        <section class="left content">
+                            <h1>SkywayVR</h1>
+                            <div class="detail">
+                                <p>次世代コミュニケーション SkywayVR</p>
+                            </div>
+                            <div class="ui segment">
+                                <div class="ui red ribbon label">Enter</div>
+                                <span>さあ，始めましょう！</span>
+                                <form action="chat.html" class="ui form components">
+                                    <div class="center field">
+                                        <input type="submit" class="ui positive button" value="ホストとして入室"/>
+                                    </div>
+                                </form>
+                                <div class="ui horizontal divider">
+                                    Or
+                                </div>
+                                <form action="chat.html" class="ui form components">
+                                    <div class="field">
+                                        <label>Peer Id</label>
+                                        <input type="text" name="rid" required/>
+                                    </div>
+                                    <div class="center field">
+                                        <input type="submit" class="ui primary button" value="ゲストとして入室"/>
+                                    </div>
+                                </form>
+                            </div>
+                            <p>※このプロジェクトはCodesprint × NTTコミュニケーションズ online hackathon 2017 winterで作られたプロジェクトです．</p>
+                            <div class="powered">
+                                <h2 class="ui header">
+                                    <i class="settings icon"></i>
+                                    Powered by
+                                </h2>
+                                <div class="ui grid">
+                                    <div class="eight wide column">
+                                        <a href="https://webrtc.ecl.ntt.com/">
+                                            <img src="img/skyway-ogp.png" class="ui small image skyway"/>
+                                        </a>
+                                    </div>
+                                    <div class="eight wide column">
+                                        <a href="https://facebook.github.io/react-vr/" class="ui header">
+                                            <img src="img/react.png" width="100"/>
+                                            <div class="content">
+                                                React VR
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="sp">
+            <div class="center header">
+                <div class="ui container">
+                    <h2 class="subtitle">次世代コミュニケーション</h2>
+                    <h1 class="title">SkywayVR</h1>
+                </div>
+            </div>
+            <img class="kv" src="img/kv.png" alt="kv"/>
+            <div class="ui container">
+                <div class="ui segment">
+                    <div class="ui red ribbon label">Enter</div>
+                    <span>さあ始めましょう！</span>
+                    <form action="chat.html" class="ui form components">
+                        <div class="center field">
+                            <input type="submit" class="ui positive button" value="ホストとして入室"/>
+                        </div>
+                    </form>
+                    <div class="ui horizontal divider">
+                        Or
+                    </div>
+                    <form action="chat.html" class="ui form components">
+                        <div class="field">
+                            <label>Peer Id</label>
+                            <input type="text" name="rid" required/>
+                        </div>
+                        <div class="center field">
+                            <input type="submit" class="ui primary button" value="ゲストとして入室"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="powered">
+                    <h2 class="ui center aligned icon header">
+                        <i class="settings icon"></i>
+                        Powered by
+                    </h2>
+                    <div class="center">
+                        <a href="https://webrtc.ecl.ntt.com/">
+                            <img src="img/skyway-ogp.png" width="150" class="center"/>
+                        </a>
+                        <div class="ui horizontal divider">meets</div>
+                        <a href="https://facebook.github.io/react-vr/" class="ui header">
+                            <img src="img/react.png" class="ui small image"/>
+                            <div class="content">
+                                React VR
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="detail">
+                    <p>※このプロジェクトはCodesprint × NTTコミュニケーションズ online hackathon 2017 winterで作られたプロジェクトです．</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

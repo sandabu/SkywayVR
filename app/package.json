@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node -e \"console.log('open browser at http://localhost:8081/vr/\\n\\n');\" && node node_modules/react-native/local-cli/cli.js start",
-    "bundle": "node node_modules/react-vr/scripts/bundle.js && cp vr/chat.html vr/build/chat.html && cp vr/index.html vr/build/index.html && cp -r static_assets/ vr/build/static_assets && sed -i '' 's/\\.\\/client\\.bundle/\\.\\/client\\.bundle\\.js/;s/\\.\\.\\/index\\.vr\\.bundle\\?platform=vr\\&dev=true/\\.\\/index\\.bundle\\.js\\?platform=vr/;s/\\.\\.\\/static_assets/\\.\\/static_assets/g' vr/build/index.html",
+    "bundle": "node node_modules/react-vr/scripts/bundle.js && cp vr/chat.html vr/build/chat.html && cp vr/index.html vr/build/index.html && cp -r static_assets/ vr/build/static_assets && cp -r vr/img/ vr/build/img && sed -i '' 's/\\.\\/client\\.bundle/\\.\\/client\\.bundle\\.js/;s/\\.\\.\\/ index\\.vr\\.bundle\\?platform=vr\\&dev=true/\\.\\/index\\.bundle\\.js\\?platform=vr/;s/\\.\\.\\/static_assets/\\.\\/ static_assets/g' vr/build/chat.html",
     "open": "node -e \"require('xopen')('http://localhost:8081/vr/')\"",
     "devtools": "react-devtools",
     "test": "jest",

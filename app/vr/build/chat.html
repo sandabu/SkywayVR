@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <title>SkywayVR</title>
+    <style>body { margin: 0; }</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  </head>
+  <body>
+    <script src="./client.bundle.js?platform=vr"></script>
+    <script>
+      // Initialize the React VR application
+      const vr = ReactVR.init(
+        '../index.vr.bundle?platform=vr&dev=true',
+        // Attach it to the body tag
+        document.body,
+        {
+          cursorVisibility: 'visible',
+        }
+      );
+    </script>
+  </body>
+</html>
+
