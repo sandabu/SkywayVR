@@ -93,6 +93,11 @@ https://semantic-ui.com
 https://jquery.com/
 
 
+## Tips
+- 「Your id is undefined」と表示されたら，リロードしてください
+- 一部スマートフォンではアバターが表示されるまで時間がかかる場合があります．
+- 「Click to dump」をクリックするとデバッグ用としてconsoleにPeerIDが表示されます．
+
 ## 創意工夫した点
 
 ### 実装する上でこだわった創意工夫点
