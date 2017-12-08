@@ -15,6 +15,7 @@ import {
   VrHeadModel,
   Animated,
   Image,
+  Sound,
 } from 'react-vr';
 
 export default class SkywayVR extends React.Component {
@@ -108,13 +109,15 @@ export default class SkywayVR extends React.Component {
   _getLike() {
     console.log('いいね！されました');
 
+    const likeHeadRot = {
+      x: -14.67994310099575,
+      y: 218.1507823613087,
+      z: 180
+    };
+
     this.setState({
       status: this.Status.GET_LIKE,
-      avatar_rot: {
-        x: -14.67994310099575,
-        y: 218.1507823613087,
-        z: 180
-      }
+      avatar_rot: likeHeadRot
     });
 
     Animated.spring(this.state.likeBounceValue, {
@@ -189,12 +192,11 @@ export default class SkywayVR extends React.Component {
         {/*スタートボタン*/}
 
         {/*いいねボタン*/}
-        <Image source={ asset('like_button.jpg') } style={{
+        <Image source={ asset('like_button.png') } style={{
           height: 0.6, width: 2,
-          backgroundColor: '#ffffff66',
           transform: [
-            { translate: [1.5, 2.5, -1.5] },
-            { rotateY: -25 }
+            { translate: [-4, 2.5, -3] },
+            { rotateY: 25 }
           ],
         }} onEnter={ this._gazeLike.bind(this)} >
         </Image>
@@ -210,10 +212,21 @@ export default class SkywayVR extends React.Component {
             { rotateY: -80 }
           ],
         }}/>
-
         {/*サムアップ*/}
 
+        {/*いいね文字*/}
+        <Animated.Image source={ asset('iine.png') } style={{
+          height: 1,
+          width: 3,
+          transform: [
+            { scale: this.state.likeBounceValue },
+            { translate: [1.2, 3.5, -3] },
+            { rotateY: -25 }
+          ],
+        }}/>
+        {/*いいね文字*/}
 
+        {/*アバター*/}
         <Model source={{
           obj: asset('models/RikuFace/mesh.obj'),
           mtl: asset('models/RikuFace/mesh.mtl'),
@@ -225,19 +238,16 @@ export default class SkywayVR extends React.Component {
             { rotateZ : this.state.avatar_rot.z },
           ],
           display: this.state.friend_id ? 'flex' : 'none',
-        }} lit={true} />
+        }} lit={true} >
+          {/*ホーンサウンド*/}
+          <Sound source={ asset('horn.mp3') } autoPlay={ false } playControl={ this.state.status === this.Status.GET_LIKE ? 'play' : 'stop'} />
+        </Model>
+        {/*アバター*/}
 
+        {/*ライト*/}
         <PointLight intensity={1.0} style={{ transform: [{ translate: [0, 2, 0] }, {rotateX: -90}] }} />
-        {/*<Box dimDepth={2} dimHeight={2} dimWidth={2}*/}
-             {/*style={{*/}
-               {/*transform: [*/}
-                {/*{ translate: [3, 1, -5] },*/}
-               {/*],*/}
-               {/*color: 'red',*/}
-             {/*}}*/}
-             {/*lit={true}*/}
-        {/*/>*/}
         <AmbientLight intensity={0.2} />
+        {/*ライト*/}
       </View>
     );
   }
