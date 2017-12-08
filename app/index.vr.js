@@ -208,7 +208,7 @@ export default class SkywayVR extends React.Component {
           width: 1.2,
           transform: [
             { scale: this.state.likeBounceValue },
-            { translate: [1.6, 1.5, -1.4] },
+            { translate: [2, 1.5, -2.7] },
             { rotateY: -80 }
           ],
         }}/>
@@ -220,7 +220,7 @@ export default class SkywayVR extends React.Component {
           width: 3,
           transform: [
             { scale: this.state.likeBounceValue },
-            { translate: [1.2, 3.5, -3] },
+            { translate: [1.7, 3.5, -4.3] },
             { rotateY: -25 }
           ],
         }}/>
@@ -232,7 +232,7 @@ export default class SkywayVR extends React.Component {
           mtl: asset('models/RikuFace/mesh.mtl'),
         }} style={{
           transform: [
-            { translate: [0, 1.5, -0.65] },
+            { translate: [0, 1.5, -1] },
             { rotateX : this.state.avatar_rot.x },
             { rotateY : this.state.avatar_rot.y },
             { rotateZ : this.state.avatar_rot.z },
