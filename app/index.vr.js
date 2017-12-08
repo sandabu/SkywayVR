@@ -164,7 +164,7 @@ export default class SkywayVR extends React.Component {
   render() {
     return (
       <View>
-        <Pano source={ asset('lake.jpg') } />
+        <Pano source={ asset(this.props.pano) } />
         <Scene style={{ transform: [{ translate: [0, 1.5, 0] }] }} />
 
         {/*スタートボタン*/}
@@ -240,6 +240,7 @@ export default class SkywayVR extends React.Component {
           display: this.state.friend_id ? 'flex' : 'none',
         }} lit={true} >
           {/*ホーンサウンド*/}
+          {/*iOSだと聞こえない...*/}
           <Sound source={ asset('horn.mp3') } autoPlay={ false } playControl={ this.state.status === this.Status.GET_LIKE ? 'play' : 'stop'} />
         </Model>
         {/*アバター*/}

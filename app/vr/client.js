@@ -4,22 +4,31 @@
 
 // Auto-generated content.
 import {VRInstance} from 'react-vr-web';
-import 'webvr-polyfill';
 import SkyWayBridge from '../skyway/SkyWayBridge.js';
+import 'webvr-polyfill';
 
 function init(bundle, parent, options) {
+  //iOS11でも2眼モード(一部機能せず)
+  //https://qiita.com/shalman/items/ee576fa28e763ce83bdf
   WebVRPolyfill.InstallWebVRSpecShim();
+
+  //パノラマ設定
+  const panoSearch = location.search.match(/pano=(.*?)(&|$)/);
+  const pano = panoSearch? panoSearch[1] : 'lake.jpg';
+
   const vr = new VRInstance(bundle, 'SkywayVR', parent, {
     // Add custom options here
+    //レイを飛ばす
     raycasters: [
       {
-        getType: () => "mycursor",
+        getType: () => 'mycursor',
         getRayOrigin: () => [0, 0, 0],
         getRayDirection: () => [0, 0, -1],
         drawsCursor: () => true
       }
     ],
     cursorVisibility: 'visible',
+    initialProps: { 'pano': pano},
     ...options,
   });
   vr.render = function() {

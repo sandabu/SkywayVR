@@ -68,6 +68,10 @@
             margin: -12px 0;
         }
 
+        .buttons .button{
+            margin: 7px;
+        }
+
 
         @media screen and (min-width: 0px) and (max-device-width: 670px) {
             h1, h2, h3, p {
@@ -117,25 +121,11 @@
                             <div class="ui segment">
                                 <div class="ui red ribbon label">Enter</div>
                                 <span>さあ，始めましょう！</span>
-                                <form action="chat.html" class="ui form components">
-                                    <div class="center field">
-                                        <input type="submit" class="ui positive button" value="ホストとして入室"/>
-                                    </div>
-                                </form>
-                                <div class="ui horizontal divider">
-                                    Or
+                                <div class="buttons">
+                                    <div class="host enter ui positive button" >ホストとして入室</div>
+                                    <div class="guest enter ui primary button" >ゲストとして入室(PeerID必須)</div>
                                 </div>
-                                <form action="chat.html" class="ui form components">
-                                    <div class="field">
-                                        <label>Peer Id</label>
-                                        <input type="text" name="rid" required/>
-                                    </div>
-                                    <div class="center field">
-                                        <input type="submit" class="ui primary button" value="ゲストとして入室"/>
-                                    </div>
-                                </form>
                             </div>
-                            <p>※このプロジェクトはCodesprint × NTTコミュニケーションズ online hackathon 2017 winterで作られたプロジェクトです．</p>
                             <div class="powered">
                                 <h2 class="ui header">
                                     <i class="settings icon"></i>
@@ -157,6 +147,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <h2 class="ui header">
+                                <i class="code icon"></i>
+                                Give me a star or Fork me!
+                            </h2>
+                            <a href="https://github.com/shalman/SkywayVR">
+                                <i class="github huge icon"></i>
+                            </a>
+                            <p class="detail">※このプロジェクトはCodesprint × NTTコミュニケーションズ online hackathon 2017 winterで作られたプロジェクトです．</p>
                         </section>
                     </div>
                 </div>
@@ -174,23 +172,10 @@
                 <div class="ui segment">
                     <div class="ui red ribbon label">Enter</div>
                     <span>さあ始めましょう！</span>
-                    <form action="chat.html" class="ui form components">
-                        <div class="center field">
-                            <input type="submit" class="ui positive button" value="ホストとして入室"/>
-                        </div>
-                    </form>
-                    <div class="ui horizontal divider">
-                        Or
+                    <div class="buttons">
+                        <div class="host enter ui positive button" >ホストとして入室</div>
+                        <div class="guest enter ui primary button" >ゲストとして入室(PeerID必須)</div>
                     </div>
-                    <form action="chat.html" class="ui form components">
-                        <div class="field">
-                            <label>Peer Id</label>
-                            <input type="text" name="rid" required/>
-                        </div>
-                        <div class="center field">
-                            <input type="submit" class="ui primary button" value="ゲストとして入室"/>
-                        </div>
-                    </form>
                 </div>
                 <div class="powered">
                     <h2 class="ui center aligned icon header">
@@ -210,12 +195,117 @@
                         </a>
                     </div>
                 </div>
+
                 <div class="detail">
+                    <h2 class="ui center aligned icon header">
+                        <i class="code icon"></i>
+                        Give me a star or Fork me!
+                    </h2>
+                    <a href="https://github.com/shalman/SkywayVR">
+                        <div class="center">
+                            <i class="github huge icon"></i>
+                        </div>
+                    </a>
                     <p>※このプロジェクトはCodesprint × NTTコミュニケーションズ online hackathon 2017 winterで作られたプロジェクトです．</p>
                 </div>
             </div>
         </div>
-
     </div>
+
+    <!--Modals-->
+    <div class="ui host modal">
+        <div class="header">Options</div>
+        <div class="content">
+            <form action="chat.html" class="ui form components">
+                <h2 class="ui header">
+                    <i class="tree icon"></i>
+                    会話したい場所を選んでください
+                </h2>
+                <div class="inline fields">
+                    <div class="field">
+                        <input type="radio" name="pano" value="lake.jpg" tabindex="0" class="hidden" checked/>
+                        <label>Lake</label>
+                        <img class="ui small image" src="static_assets/lake.jpg">
+                        <p>4MB</p>
+                    </div>
+                    <div class="field">
+                        <input type="radio" name="pano" value="Golden_Louvre.jpg" tabindex="0" class="hidden"/>
+                        <label>Louvre</label>
+                        <img class="ui small image" src="static_assets/Golden_Louvre.jpg">
+                        <p>20,1MB, 高画質</p>
+                    </div>
+                    <div class="field">
+                        <input type="radio" name="pano" value="night_town.jpg" tabindex="0" class="hidden"/>
+                        <label>Night Town</label>
+                        <img class="ui small image" src="static_assets/night_town.jpg">
+                        <p>8MB</p>
+                    </div>
+                    <p>スマートフォンなどで，画面が表示されない場合はLakeを選んでください．</p>
+                </div>
+                <div class="center field">
+                    <input type="submit" class="ui positive button" value="ホストとして入室"/>
+                    <div class="host back ui negative button">戻る</div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="ui guest modal">
+        <div class="header">Options</div>
+        <div class="content">
+            <form action="chat.html" class="ui form components">
+                <h2 class="ui header">
+                    <i class="tree icon"></i>
+                    会話したい場所を選んでください
+                </h2>
+                <div class="inline fields">
+                    <div class="field">
+                        <input type="radio" name="pano" value="lake.jpg" tabindex="0" class="hidden" checked/>
+                        <label>Lake</label>
+                        <img class="ui small image" src="static_assets/lake.jpg">
+                        <p>4MB</p>
+                    </div>
+                    <div class="field">
+                        <input type="radio" name="pano" value="Golden_Louvre.jpg" tabindex="0" class="hidden"/>
+                        <label>Louvre</label>
+                        <img class="ui small image" src="static_assets/Golden_Louvre.jpg">
+                        <p>20,1MB, 高画質</p>
+                    </div>
+                    <div class="field">
+                        <input type="radio" name="pano" value="night_town.jpg" tabindex="0" class="hidden"/>
+                        <label>Night Town</label>
+                        <img class="ui small image" src="static_assets/night_town.jpg">
+                        <p>8MB</p>
+                    </div>
+                    <p>スマートフォンなどで，画面が表示されない場合はLakeを選んでください．</p>
+                </div>
+                <div class="field">
+                    <label>Peer Id</label>
+                    <input type="text" name="rid" required/>
+                </div>
+                <div class="center field">
+                    <input type="submit" class="ui primary button" value="ゲストとして入室"/>
+                    <div class="guest back ui negative button">戻る</div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        //Event Handler
+        $('.guest.enter').on('click', () => {
+            $('.ui.guest.modal').modal('show');
+        });
+
+        $('.host.enter').on('click', () => {
+            $('.ui.host.modal').modal('show');
+        });
+
+        $('.guest.back').on('click', () => {
+          $('.ui.guest.modal').modal('hide');
+        });
+
+        $('.host.back').on('click', () => {
+          $('.ui.host.modal').modal('hide');
+        });
+    </script>
 </body>
 </html>
