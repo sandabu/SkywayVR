@@ -9,7 +9,7 @@ NTTコム・CodeSprintオンラインハッカソン 最優秀賞受賞Repo
 
 ### domain
 
-https://shalman.github.io/SkywayVR/app/vr/build/
+https://sandabu.github.io/SkywayVR/app/vr/build/
 
 ### How to use
 
