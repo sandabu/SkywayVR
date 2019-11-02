@@ -6,7 +6,7 @@
   "devDependencies": {
     "codecheck": "^0.6.0",
     "chai": "^3.5.0",
-    "eslint": "^3.18.0"
+    "eslint": "^6.6.0"
   },
   "dependencies": {
     "chai-http": "^3.0.0",
